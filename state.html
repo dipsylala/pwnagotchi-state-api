@@ -4,15 +4,25 @@
         <style>
             body {
                 font-family: "Courier New", Courier, monospace;
+                font-size: 15px;
             }
             .gotchicontainer{
                 max-width:600px;
             }
-            .headerbar{
+
+            .flexible{
                 display:flex;
                 flex-wrap: wrap;
+            }
+
+            .headerbar{
                 border-bottom: 3px solid;
             }
+
+            .headerbar div{
+                display:inline;
+            }
+
             .channel{
                 width: 150px;
                 margin-right: 10px;
@@ -32,41 +42,56 @@
             .face {
                 font-family: "Courier New", Courier, monospace;
                 font-size: 50px;
-            }
-            .mainarea{
-                display:flex;
-                flex-wrap: wrap;
-            }
-            .face {
                 flex:auto;
+                max-width: 250px;
             }
+
+            .name {
+                font-weight: bold;
+            }
+
+            .title {
+                font-weight: bold;
+            }
+
             .status {
                 flex:auto;
-                min-width:200px;
             }
-            .friendarea{
-                display:flex;
-                flex-wrap: wrap;
-            }
-            .friend_face{
+
+            .friend_face_text{
                 font-family: "Courier New", Courier, monospace;
-                font-size: 25px;
-                height: 20px;
-                line-height: 20px;
-                padding: 15px;
+                font-size: 20px;
+                height: 30px;
+                line-height: 30px;
+                width: 90px;
             }
-            .friend_name{
+
+            .friend_name_text{
                 flex-shrink: 1;
+                font-size: 10px;
+                height: 30px;
+                line-height: 30px;
                 width: 250px;
-                height: 20px;
-                line-height: 20px;
+                padding-left: 5px;
+            }
+
+            .systemarea > div {
+                flex-shrink: auto;
                 padding: 15px;
             }
+
+            .systemarea div {
+                display: inline;
+            }
+
             .lowerarea{
-                display:flex;
-                flex-wrap: wrap;
                 border-top: 3px solid;
             }
+
+            .lowerarea div{
+                display:inline;
+            }
+
             .shakes{
                 flex-shrink: 1;
             }
@@ -81,20 +106,23 @@
 
             let stateRetrieval = (function(){
                 let _populateDisplay = function(result){
+                  $("#channel").innerText = result.channel;
+                  $("#aps").innerText = result.aps;
+                  $("#uptime").innerText = result.uptime;
 
-                    // TODO: Account for initialised = false or else you get UNDEFINED everywhere on the display
-                    $("#channel").innerText = "Channel: " + result.channel;
-                    $("#aps").innerText = "APs: " + result.aps;
-                    $("#uptime").innerText = "Uptime: " + result.uptime;
+                  $("#name").innerText = result.name + ">";
+                  $("#face").innerText = result.face;
+                  $("#status").innerText = result.status;
 
-                    $("#face").innerText = result.face;
-                    $("#status").innerText = result.status;
+                  $("#friend_face_text").innerText = result.friend_face_text !== null ? result.friend_face_text : "";
+                  $("#friend_name_text").innerText = result.friend_name_text !== null ? result.friend_name_text : "";
 
-                    $("#friend_face").innerText = result.friend_face !== null ? result.friend_face : "";
-                    $("#friend_name").innerText = result.friend_name !== null ? result.friend_name : "";
+                  $("#shakes").innerText = result.pwnd_run + "(" + result.pwnd_tot + ")";
+                  $("#mode").innerText = result.mode;
 
-                    $("#shakes").innerText = "Pwned: " + result.shakes;
-                    $("#mode").innerText = result.mode;
+                  $("#cpu").innerText = (result.cpu * 100).toFixed(2) + "%";
+                  $("#temperature").innerText = result.temperature.toFixed(2) +"c";
+                  $("#memory").innerText = (result.memory * 100).toFixed(2) + "%"
                 };
 
                 let _retrieval = function(){
@@ -110,7 +138,7 @@
                 };
 
                 let initialise = function(){
-                    setInterval(_retrieval, 1000)
+                    setInterval(_retrieval, 2000)
                 };
 
                 return {
@@ -122,31 +150,55 @@
     </head>
     <body>
         <div class="gotchicontainer">
-            <div class="headerbar">
-                <div class="channel" id="channel" ></div>
-                <div class="aps" id="aps"></div>
+            <div class="headerbar flexible">
+                <div>
+                    <div class="title">Channel:</div>
+                    <div class="channel" id="channel" ></div>
+                </div>
+
+                <div>
+                    <div class="title">APs:</div>
+                    <div class="aps" id="aps"></div>
+                </div>
+
                 <div class="padder"></div>
-                <div class="uptime" id="uptime"></div>
-            </div>
-            <div class="mainarea">
-                <div class="face" id="face">
-                </div>
-                <div class="status" id="status">
+                <div>
+                    <div class="title">Uptime: </div>
+                    <div class="uptime" id="uptime"></div>
                 </div>
             </div>
-            <div class="friendarea">
-                <div class="friend_face" id="friend_face">
+            <div class="mainarea flexible">
+                <div class="name" id="name"></div>
+                <div class="face" id="face"></div>
+                <div class="status" id="status"></div>
+            </div>
+            <div class="friendarea flexible">
+                <div class="friend_face_text" id="friend_face_text"></div>
+                <div class="friend_name_text" id="friend_name_text"></div>
+            </div>
+            <div class="systemarea flexible">
+                <div>
+                    <div class="title">CPU: </div>
+                    <div class="cpu" id="cpu"></div>
                 </div>
-                <div class="friend_name" id="friend_name">
+                <div>
+                    <div class="title">Temp: </div>
+                    <div class="temperature" id="temperature"></div>
+                </div>
+                <div>
+                    <div class="title">Memory: </div>
+                    <div class="memory" id="memory"></div>
                 </div>
             </div>
-            <div class="lowerarea">
-                <div class="shakes" id="shakes"></div>
+            <div class="lowerarea flexible">
+                <div>
+                    <div class="title">Pwned: </div>
+                    <div class="shakes" id="shakes"></div>
+                </div>
                 <div class="padder"></div>
-                <div class="mode" id="mode">
-                </div>
+                <div class="mode title" id="mode"></div>
             </div>
-        <div>
+        </div>
         <script>
             stateRetrieval.initialise();
         </script>
