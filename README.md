@@ -11,7 +11,7 @@ Call as /plugins/state-api/ to retrieve the state.html
 Add literally anything after that URL to retrieve the JSON. I'll probably tidy that up shortly. 
 
 ### Sample response:
-````
+```
 {
     "aps":"1 (29)",
     "channel":"*",
@@ -40,7 +40,7 @@ Add literally anything after that URL to retrieve the JSON. I'll probably tidy t
     "uptime":"01:55:16",
     "version":"1.2.1"
 }
-````
+```
 
 ## TODO
 `GET /api/v1/inbox https://pwnagotchi.ai/api/local/#get-api-v1-inbox` - get any unread messages and/or total messages
