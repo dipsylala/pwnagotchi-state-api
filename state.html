@@ -1,0 +1,138 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family: "Courier New", Courier, monospace;
+            }
+            .gotchicontainer{
+                width:600px;
+            }
+            .headerbar{
+                display:flex;
+                border-bottom: 3px solid;
+            }
+            .channel{
+                width: 150px;
+                margin-right: 10px;
+            }
+            .aps{
+                flex-shrink: 1;
+                width: 150px;
+            }
+            .padder{
+                flex-grow: 1;
+                flex-shrink: 1;
+            }
+            .uptime{
+                flex-shrink: 1;
+                width: 200px;
+            }
+            .face {
+                font-family: "Courier New", Courier, monospace;
+                font-size: 50px;
+            }
+            .mainarea{
+                display:flex;
+            }
+            .mainarea > div{
+                flex:1;
+            }
+            .friendarea{
+                display:flex;
+            }
+            .friend_face{
+                font-family: "Courier New", Courier, monospace;
+                font-size: 25px;
+                height: 20px;
+                line-height: 20px;
+                padding: 15px;
+            }
+            .friend_name{
+                flex-shrink: 1;
+                width: 250px;
+                height: 20px;
+                line-height: 20px;
+                padding: 15px;
+            }
+            .lowerarea{
+                display:flex;
+                border-top: 3px solid;
+            }
+            .shakes{
+                flex-shrink: 1;
+            }
+            .mode{
+                flex-shrink: 1;
+            }
+        </style>
+
+        <script>
+            const $ = document.querySelector.bind(document);
+
+            let stateRetrieval = (function(){
+                let _populateDisplay = function(result){
+                  $("#channel").innerText = "Channel: " + result.channel;
+                  $("#aps").innerText = "APs: " + result.aps;
+                  $("#uptime").innerText = "Uptime: " + result.uptime;
+
+                  $("#face").innerText = result.face;
+                  $("#status").innerText = result.status;
+
+                  $("#friend_face").innerText = result.friend_face !== null ? result.friend_face : "";
+                  $("#friend_name").innerText = result.friend_name !== null ? result.friend_name : "";
+
+                  $("#shakes").innerText = "Pwned: " + result.shakes;
+                  $("#mode").innerText = result.mode;
+                };
+
+                let _retrieval = function(){
+                    let xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState === 4 && this.status === 200) {
+                            let response = JSON.parse(this.responseText);
+                            _populateDisplay(response)
+                        }
+                    };
+                    xhttp.open("GET", "all", true);
+                    xhttp.send();
+                };
+
+                let initialise = function(){
+                    setInterval(_retrieval, 1000)
+                };
+
+                return {
+                    initialise: initialise
+                }
+            }());
+
+        </script>
+    </head>
+    <body>
+        <div class="gotchicontainer">
+            <div class="headerbar">
+                <div class="channel" id="channel" ></div>
+                <div class="aps" id="aps"></div>
+                <div class="padder"></div>
+                <div class="uptime" id="uptime"></div>
+            </div>
+            <div class="mainarea">
+                <div class="face" id="face"></div>
+                <div class="status" id="status"></div>
+            </div>
+            <div class="friendarea">
+                <div class="friend_face" id="friend_face"></div>
+                <div class="friend_name" id="friend_name"></div>
+            </div>
+            <div class="lowerarea">
+                <div class="shakes" id="shakes"></div>
+                <div class="padder"></div>
+                <div class="mode" id="mode">
+                </div>
+            </div>
+        </div>
+        <script>
+            stateRetrieval.initialise();
+        </script>
+    </body>
+</html>
