@@ -45,6 +45,8 @@ Add literally anything after that URL to retrieve the JSON. I'll probably tidy t
 ## TODO
 `GET /api/v1/inbox https://pwnagotchi.ai/api/local/#get-api-v1-inbox` - get any unread messages and/or total messages
 
+STOP USING PIXELS FOR SIZES! It looks horrible on a hi-density screen :)
+
 # Default page based on JSON being returned
 
 ![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/screen.gif "Animated Pwnagotchi HTML page")
