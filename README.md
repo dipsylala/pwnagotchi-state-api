@@ -11,7 +11,7 @@ Call as /plugins/state-api/ to retrieve the state.html
 Add literally anything after that URL to retrieve the JSON. I'll probably tidy that up shortly. 
 
 ### Sample response:
-````
+```
 {
     "aps":"1 (29)",
     "channel":"*",
