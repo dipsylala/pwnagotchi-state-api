@@ -1,14 +1,16 @@
 <html>
     <head>
+
         <style>
             body {
                 font-family: "Courier New", Courier, monospace;
             }
             .gotchicontainer{
-                width:600px;
+                max-width:600px;
             }
             .headerbar{
                 display:flex;
+                flex-wrap: wrap;
                 border-bottom: 3px solid;
             }
             .channel{
@@ -33,12 +35,18 @@
             }
             .mainarea{
                 display:flex;
+                flex-wrap: wrap;
             }
-            .mainarea > div{
-                flex:1;
+            .face {
+                flex:auto;
+            }
+            .status {
+                flex:auto;
+                min-width:200px;
             }
             .friendarea{
                 display:flex;
+                flex-wrap: wrap;
             }
             .friend_face{
                 font-family: "Courier New", Courier, monospace;
@@ -56,6 +64,7 @@
             }
             .lowerarea{
                 display:flex;
+                flex-wrap: wrap;
                 border-top: 3px solid;
             }
             .shakes{
@@ -64,6 +73,7 @@
             .mode{
                 flex-shrink: 1;
             }
+
         </style>
 
         <script>
@@ -71,25 +81,27 @@
 
             let stateRetrieval = (function(){
                 let _populateDisplay = function(result){
-                  $("#channel").innerText = "Channel: " + result.channel;
-                  $("#aps").innerText = "APs: " + result.aps;
-                  $("#uptime").innerText = "Uptime: " + result.uptime;
 
-                  $("#face").innerText = result.face;
-                  $("#status").innerText = result.status;
+                    // TODO: Account for initialised = false or else you get UNDEFINED everywhere on the display
+                    $("#channel").innerText = "Channel: " + result.channel;
+                    $("#aps").innerText = "APs: " + result.aps;
+                    $("#uptime").innerText = "Uptime: " + result.uptime;
 
-                  $("#friend_face").innerText = result.friend_face !== null ? result.friend_face : "";
-                  $("#friend_name").innerText = result.friend_name !== null ? result.friend_name : "";
+                    $("#face").innerText = result.face;
+                    $("#status").innerText = result.status;
 
-                  $("#shakes").innerText = "Pwned: " + result.shakes;
-                  $("#mode").innerText = result.mode;
+                    $("#friend_face").innerText = result.friend_face !== null ? result.friend_face : "";
+                    $("#friend_name").innerText = result.friend_name !== null ? result.friend_name : "";
+
+                    $("#shakes").innerText = "Pwned: " + result.shakes;
+                    $("#mode").innerText = result.mode;
                 };
 
                 let _retrieval = function(){
                     let xhttp = new XMLHttpRequest();
                     xhttp.onreadystatechange = function() {
-                        if (this.readyState === 4 && this.status === 200) {
-                            let response = JSON.parse(this.responseText);
+                        if (this.readyState == 4 && this.status == 200) {
+                            var response = JSON.parse(this.responseText);
                             _populateDisplay(response)
                         }
                     };
@@ -117,12 +129,16 @@
                 <div class="uptime" id="uptime"></div>
             </div>
             <div class="mainarea">
-                <div class="face" id="face"></div>
-                <div class="status" id="status"></div>
+                <div class="face" id="face">
+                </div>
+                <div class="status" id="status">
+                </div>
             </div>
             <div class="friendarea">
-                <div class="friend_face" id="friend_face"></div>
-                <div class="friend_name" id="friend_name"></div>
+                <div class="friend_face" id="friend_face">
+                </div>
+                <div class="friend_name" id="friend_name">
+                </div>
             </div>
             <div class="lowerarea">
                 <div class="shakes" id="shakes"></div>
@@ -130,7 +146,7 @@
                 <div class="mode" id="mode">
                 </div>
             </div>
-        </div>
+        <div>
         <script>
             stateRetrieval.initialise();
         </script>

@@ -7,10 +7,10 @@ from pathlib import Path
 
 class StateApi(plugins.Plugin):
     __name__ = 'state-api'
-    __author__ = 'Dipsylala on Github'
+    __author__ = 'https://github.com/dipsylala'
     __version__ = '1.0.0'
     __license__ = 'GPL3'
-    __description__ = 'Returns state.html if called with no parameters, otherwise sends JSON'
+    __description__ = 'Provides JSON state data or a default page'
 
     DISPLAY = None
     AGENT = None
@@ -19,14 +19,12 @@ class StateApi(plugins.Plugin):
         logging.debug("State API plugin created")
         self.display_state = None
 
-    # called when http://<host>:<port>/plugins/<plugin>/ is called
-    # must return a html page
     # IMPORTANT: If you use "POST"s, add a csrf-token (via csrf_token() and render_template_string)
     def on_webhook(self, path, request):
         if request.method != 'GET':
             return jsonify({"message": "Method Not Allowed"}), 405
 
-        if path is None or path == '':
+        if path == 'display':
             return Response(Path(os.path.dirname(os.path.realpath(__file__)) + '/state.html').read_text(), 'text/html')
 
         if self.DISPLAY is None or self.AGENT is None:
@@ -58,4 +56,3 @@ class StateApi(plugins.Plugin):
     def on_ready(self, agent):
         logging.info("unit is ready")
         self.AGENT = agent
-
