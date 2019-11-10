@@ -8,8 +8,8 @@ import pwnagotchi.grid as grid
 
 class StateApi(plugins.Plugin):
     __name__ = 'state-api'
-    __author__ = 'Dipsylala on Github'
-    __version__ = '1.0.0'
+    __author__ = 'https://github.com/dipsylala'
+    __version__ = '0.9.0'
     __license__ = 'GPL3'
     __description__ = 'Provides JSON state data or a default page'
 
@@ -27,7 +27,12 @@ class StateApi(plugins.Plugin):
             return jsonify({"message": "Method Not Allowed"}), 405
 
         if path == 'display':
-            return Response(Path(os.path.dirname(os.path.realpath(__file__)) + '/state.html').read_text(), 'text/html')
+            theme = "state.html"
+
+            if 'theme' in self.options:
+                theme = "state-" + self.options["theme"] + ".html"
+
+            return Response(Path(os.path.dirname(os.path.realpath(__file__)) + '/' + theme).read_text(), 'text/html')
 
         if self.DISPLAY is None:
             return jsonify({"initialised": "false"})

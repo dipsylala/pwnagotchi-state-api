@@ -111,6 +111,10 @@
 
             let stateRetrieval = (function(){
                 let _populateDisplay = function(result){
+
+                  $("#initialiser").style.display = (result.initialised === "false") ? "block" : "none";
+                  $("#maindisplay").style.display = (result.initialised === "false") ? "none" : "block";
+
                   $("#channel").innerText = result.channel;
                   $("#aps").innerText = result.aps;
                   $("#uptime").innerText = result.uptime;
@@ -154,7 +158,11 @@
         </script>
     </head>
     <body>
-        <div class="gotchicontainer">
+        <div id="initialiser" class="gotchiinitialising">
+            Initialising!
+        </div>
+
+        <div id="maindisplay" class="gotchicontainer" style="display:none;">
             <div class="headerbar flexible">
                 <div>
                     <div class="title">Channel:</div>

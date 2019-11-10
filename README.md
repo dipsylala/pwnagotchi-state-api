@@ -2,13 +2,19 @@
 
 Throw it into the plugins directory. 
 
-At the moment it only has the `enabled: True` config option.
+## Configuration
+
+```
+    state-api:
+      enabled: true
+      theme: minimal # optional - can be minimal or darkmode. Is state.html if left out.
+```
 
 It takes information from the display state, as well as the `/api/v1/mesh/data` and `/api/v1/mesh/peers` providers. 
 
-Call as /plugins/state-api/ to retrieve the state.html
+Call `/plugins/state-api/display` to retrieve the default page
 
-Add literally anything after that URL to retrieve the JSON. I'll probably tidy that up shortly. 
+Call `/plugins/state-api/` to retrieve the state JSON
 
 ### Sample response:
 ```
@@ -42,11 +48,18 @@ Add literally anything after that URL to retrieve the JSON. I'll probably tidy t
 }
 ```
 
+## I Want to make my own theme!
+
+state.html is a good start. Name your file `state-{name_of_theme}.html`
+
+For example, I renamed state.html to state-darkmode.html and set the background and color CSS. Have fun!
+
 ## TODO
 `GET /api/v1/inbox https://pwnagotchi.ai/api/local/#get-api-v1-inbox` - get any unread messages and/or total messages
-
-Make the display look pretty for a phone screen. 
 
 # Default page based on JSON being returned
 
 ![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/screen.gif "Animated Pwnagotchi HTML page")
+
+![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/minimal.gif "Minimal themed Pwnagotchi HTML page")
+
