@@ -4,7 +4,7 @@
         <style>
             body {
                 font-family: "Courier New", Courier, monospace;
-                font-size: 1em;
+                font-size: 100%;
                 background: #000000;
                 color: #AAAAAA;
             }
@@ -182,7 +182,7 @@
                             _populateDisplay(response)
                         }
                     };
-                    xhttp.open("GET", "all", true);
+                    xhttp.open("GET", "json", true);
                     xhttp.send();
                 };
 

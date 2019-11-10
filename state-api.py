@@ -26,13 +26,16 @@ class StateApi(plugins.Plugin):
         if request.method != 'GET':
             return jsonify({"message": "Method Not Allowed"}), 405
 
-        if path == 'display':
+        if path is None or path == "":
             theme = "state-default.html"
 
             if 'theme' in self.options:
                 theme = "state-" + self.options["theme"] + ".html"
 
             return Response(Path(os.path.dirname(os.path.realpath(__file__)) + '/state-api/' + theme).read_text(), 'text/html')
+
+        if path != "json":
+            return jsonify({"message": "Unsupported Media Type"}), 415
 
         if self.DISPLAY is None:
             return jsonify({"initialised": "false"})
