@@ -8,7 +8,7 @@ Throw the html and py files into the plugins directory.
   plugins:
     state-api:
       enabled: true
-      theme: minimal # optional - can be minimal or darkmode. Is state.html if left out.
+      theme: minimal # optional - can be minimal,darkmode or hotdog. Uses state.html by default.
 ```
 
 It takes information from the display state, as well as the `/api/v1/mesh/data` and `/api/v1/mesh/peers` providers. 
