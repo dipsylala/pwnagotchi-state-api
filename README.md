@@ -57,9 +57,11 @@ For example, I renamed state.html to state-darkmode.html and set the background 
 ## TODO
 `GET /api/v1/inbox https://pwnagotchi.ai/api/local/#get-api-v1-inbox` - get any unread messages and/or total messages
 
-# Default page based on JSON being returned
+## Default page based on JSON being returned
 
 ![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/screen.gif "Animated Pwnagotchi HTML page")
+
+## Example minimal version
 
 ![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/minimal.gif "Minimal themed Pwnagotchi HTML page")
 
