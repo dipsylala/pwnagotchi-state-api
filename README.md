@@ -13,9 +13,9 @@ Throw the py file and state-api directory into the plugins directory.
 
 It takes information from the display state, as well as the `/api/v1/mesh/data` and `/api/v1/mesh/peers` providers. 
 
-Call `/plugins/state-api/display` to retrieve the default page
+Call `/plugins/state-api/` to retrieve the default page
 
-Call `/plugins/state-api/` to retrieve the state JSON
+Call `/plugins/state-api/json` to retrieve the state JSON
 
 ### Sample response:
 ```
