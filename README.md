@@ -53,6 +53,14 @@ Call `/plugins/state-api/json` to retrieve the state JSON
 
 state-default.html is a good start. Name your file `state-{name_of_theme}.html`
 
+If you find the theme a little small for your device, edit the font-size in the body style and the rest should scale. I should do something like media detection, but meh. 
+```
+            body {
+                font-family: "Courier New", Courier, monospace;
+                font-size: 100%; <--------- 200% looks pretty good on an iPhone.
+            }
+```
+
 For example, I renamed state-default.html to state-darkmode.html and set the background and color CSS. Have fun!
 
 Bear in mind - I've kept it simple, and everything in one page. This avoids complicating the plugin, but also saves your browser accessing random sites for libraries. Most of the JavaScript you need should be in state.html
