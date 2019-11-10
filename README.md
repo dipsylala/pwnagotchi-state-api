@@ -75,6 +75,10 @@ I tried these briefly on a phone and they were........ small. Maybe a phone-frie
 
 ![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/minimal.gif "Minimal themed Pwnagotchi HTML page")
 
+## Example multicolor version - the colours on the cpu/temp/memory change depending on severity
+
+![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/hotdog.png "Hotdog themed Pwnagotchi HTML page")
+
 ## Dark mode on a phone
 
 ![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/dark%20mode%20phone.jpg "Minimal themed Pwnagotchi HTML page")
