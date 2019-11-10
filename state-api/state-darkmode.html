@@ -8,8 +8,39 @@
                 background: #000000;
                 color: #AAAAAA;
             }
+
+            @media screen and (min-width: 750px) {
+            body {
+                font-size:150%
+                }
+            }
+
+            @media screen and (min-width: 1000px) {
+            body {
+                font-size:200%
+                }
+            }
+
+            @media screen and (min-width: 1250px) {
+            body {
+                font-size:250%
+                }
+            }
+
             .gotchicontainer{
                 max-width:38em
+            }
+
+            .ok {
+                color: green;
+            }
+
+            .warning{
+                color:orange;
+            }
+
+            .danger{
+                color:red;
             }
 
             .flexible{
@@ -18,7 +49,7 @@
             }
 
             .headerbar{
-                border-bottom: 3px solid;
+                border-bottom: 3px solid red;
             }
 
             .headerbar div{
@@ -47,6 +78,7 @@
                 flex:auto;
                 min-width: 4em;
                 max-width: 6em;
+
             }
 
             .name {
@@ -59,6 +91,7 @@
 
             .status {
                 flex:auto;
+                color: purple;
             }
 
             .friend_face_text{
@@ -69,6 +102,7 @@
                 width: 5em;
                 margin-top: auto;
                 margin-bottom: auto;
+                color: green;
             }
 
             .friend_name_text{
@@ -80,6 +114,7 @@
                 padding-left: 0.5em;
                 margin-top: auto;
                 margin-bottom: auto;
+                color: greenyellow;
             }
 
             .systemarea > div {
@@ -92,7 +127,7 @@
             }
 
             .lowerarea{
-                border-top: 3px solid;
+                border-top: 3px solid red;
             }
 
             .lowerarea div{
@@ -112,6 +147,23 @@
             const $ = document.querySelector.bind(document);
 
             let stateRetrieval = (function(){
+                let _setWarningField = function(elementName, lowerBand, middleBand, value, units) {
+                    let element = $("#" + elementName);
+                    element.classList.remove("ok");
+                    element.classList.remove("warning");
+                    element.classList.remove("danger");
+
+                    let className = "danger";
+                    if (value < lowerBand){
+                        className = "ok";
+                    } else if (value < middleBand){
+                        className = "warning";
+                    }
+
+                    element.classList.add(className);
+                    element.innerText = value + units;
+                }
+
                 let _populateDisplay = function(result){
 
                   $("#initialiser").style.display = (result.initialised === "false") ? "block" : "none";
@@ -131,9 +183,13 @@
                   $("#shakes").innerText = result.pwnd_run + "(" + result.pwnd_tot + ")";
                   $("#mode").innerText = result.mode;
 
-                  $("#cpu").innerText = (result.cpu * 100).toFixed(2) + "%";
-                  $("#temperature").innerText = result.temperature.toFixed(2) +"c";
-                  $("#memory").innerText = (result.memory * 100).toFixed(2) + "%"
+                  let cpu = (result.cpu * 100).toFixed(2);
+                  let temperature = result.temperature.toFixed(2);
+                  let memory = (result.memory * 100).toFixed(2);
+
+                  _setWarningField("cpu", 25, 60, cpu, "%");
+                  _setWarningField("temperature", 30, 80, temperature, "c");
+                  _setWarningField("memory", 50, 60, memory, "%");
                 };
 
                 let _retrieval = function(){
