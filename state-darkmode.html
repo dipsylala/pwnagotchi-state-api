@@ -8,7 +8,39 @@
                 background: #000000;
                 color: #AAAAAA;
             }
+            .gotchicontainer{
+                max-width:38em
+            }
 
+            .flexible{
+                display:flex;
+                flex-wrap: wrap;
+            }
+
+            .headerbar{
+                border-bottom: 3px solid;
+            }
+
+            .headerbar div{
+                display:inline;
+            }
+
+            .channel{
+                width: 10em;
+                margin-right: 1em;
+            }
+            .aps{
+                flex-shrink: 1;
+                width: 10em;
+            }
+            .padder{
+                flex-grow: 1;
+                flex-shrink: 1;
+            }
+            .uptime{
+                flex-shrink: 1;
+                width: 13em;
+            }
             .face {
                 font-family: "Courier New", Courier, monospace;
                 font-size: 3em;
@@ -29,6 +61,27 @@
                 flex:auto;
             }
 
+            .friend_face_text{
+                font-family: "Courier New", Courier, monospace;
+                font-size: 1.5em;
+                height: 2em;
+                line-height: 2em;
+                width: 5em;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+
+            .friend_name_text{
+                flex-shrink: 1;
+                font-size: 0.8em;
+                height: 2em;
+                line-height: 2em;
+                width: 16em;
+                padding-left: 0.5em;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
+
             .systemarea > div {
                 flex-shrink: auto;
                 padding: 15px;
@@ -38,11 +91,18 @@
                 display: inline;
             }
 
+            .lowerarea{
+                border-top: 3px solid;
+            }
+
             .lowerarea div{
                 display:inline;
             }
 
             .shakes{
+                flex-shrink: 1;
+            }
+            .mode{
                 flex-shrink: 1;
             }
 
@@ -56,11 +116,24 @@
 
                   $("#initialiser").style.display = (result.initialised === "false") ? "block" : "none";
                   $("#maindisplay").style.display = (result.initialised === "false") ? "none" : "block";
+
+                  $("#channel").innerText = result.channel;
+                  $("#aps").innerText = result.aps;
+                  $("#uptime").innerText = result.uptime;
+
                   $("#name").innerText = result.name + ">";
                   $("#face").innerText = result.face;
                   $("#status").innerText = result.status;
 
+                  $("#friend_face_text").innerText = result.friend_face_text !== null ? result.friend_face_text : "";
+                  $("#friend_name_text").innerText = result.friend_name_text !== null ? result.friend_name_text : "";
+
                   $("#shakes").innerText = result.pwnd_run + "(" + result.pwnd_tot + ")";
+                  $("#mode").innerText = result.mode;
+
+                  $("#cpu").innerText = (result.cpu * 100).toFixed(2) + "%";
+                  $("#temperature").innerText = result.temperature.toFixed(2) +"c";
+                  $("#memory").innerText = (result.memory * 100).toFixed(2) + "%"
                 };
 
                 let _retrieval = function(){
@@ -88,19 +161,57 @@
     </head>
     <body>
         <div id="initialiser" class="gotchiinitialising">
-                Initialising!
+            Initialising!
         </div>
-        <div id="maindisplay" style="display:none;">
-            <div class="mainarea">
+
+        <div id="maindisplay" class="gotchicontainer" style="display:none;">
+            <div class="headerbar flexible">
+                <div>
+                    <div class="title">Channel:</div>
+                    <div class="channel" id="channel" ></div>
+                </div>
+
+                <div>
+                    <div class="title">APs:</div>
+                    <div class="aps" id="aps"></div>
+                </div>
+
+                <div class="padder"></div>
+                <div>
+                    <div class="title">Uptime: </div>
+                    <div class="uptime" id="uptime"></div>
+                </div>
+            </div>
+            <div class="mainarea flexible">
                 <div class="name" id="name"></div>
                 <div class="face" id="face"></div>
+                <div class="status" id="status"></div>
             </div>
-            <div class="status" id="status"></div>
-            <div class="lowerarea">
+            <div class="friendarea flexible">
+                <div class="friend_face_text" id="friend_face_text"></div>
+                <div class="friend_name_text" id="friend_name_text"></div>
+            </div>
+            <div class="systemarea flexible">
+                <div>
+                    <div class="title">CPU: </div>
+                    <div class="cpu" id="cpu"></div>
+                </div>
+                <div>
+                    <div class="title">Temp: </div>
+                    <div class="temperature" id="temperature"></div>
+                </div>
+                <div>
+                    <div class="title">Memory: </div>
+                    <div class="memory" id="memory"></div>
+                </div>
+            </div>
+            <div class="lowerarea flexible">
                 <div>
                     <div class="title">Pwned: </div>
                     <div class="shakes" id="shakes"></div>
                 </div>
+                <div class="padder"></div>
+                <div class="mode title" id="mode"></div>
             </div>
         </div>
         <script>
