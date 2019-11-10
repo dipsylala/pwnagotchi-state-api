@@ -77,7 +77,7 @@ I tried these briefly on a phone and they were........ small. Maybe a phone-frie
 
 ## Example multicolor version - the colours on the cpu/temp/memory change depending on severity
 
-![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/hotdog.png "Hotdog themed Pwnagotchi HTML page")
+![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/hotdog.PNG "Hotdog themed Pwnagotchi HTML page")
 
 ## Dark mode on a phone
 
