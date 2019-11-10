@@ -1,6 +1,6 @@
 # pwnagotchi State Api
 
-Throw the html and py files into the plugins directory. 
+Throw the py file and state-api directory into the plugins directory. 
 
 ## Configuration
 
@@ -8,7 +8,7 @@ Throw the html and py files into the plugins directory.
   plugins:
     state-api:
       enabled: true
-      theme: minimal # optional - can be minimal,darkmode or hotdog. Uses state.html by default.
+      theme: minimal # optional - can be default, minimal,darkmode or hotdog. Uses state-default.html by default.
 ```
 
 It takes information from the display state, as well as the `/api/v1/mesh/data` and `/api/v1/mesh/peers` providers. 
@@ -51,9 +51,9 @@ Call `/plugins/state-api/` to retrieve the state JSON
 
 ## I Want to make my own theme!
 
-state.html is a good start. Name your file `state-{name_of_theme}.html`
+state-default.html is a good start. Name your file `state-{name_of_theme}.html`
 
-For example, I renamed state.html to state-darkmode.html and set the background and color CSS. Have fun!
+For example, I renamed state-default.html to state-darkmode.html and set the background and color CSS. Have fun!
 
 Bear in mind - I've kept it simple, and everything in one page. This avoids complicating the plugin, but also saves your browser accessing random sites for libraries. Most of the JavaScript you need should be in state.html
 
