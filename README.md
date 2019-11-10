@@ -5,6 +5,7 @@ Throw it into the plugins directory.
 ## Configuration
 
 ```
+  plugins:
     state-api:
       enabled: true
       theme: minimal # optional - can be minimal or darkmode. Is state.html if left out.
