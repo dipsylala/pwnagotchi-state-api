@@ -55,6 +55,15 @@ state.html is a good start. Name your file `state-{name_of_theme}.html`
 
 For example, I renamed state.html to state-darkmode.html and set the background and color CSS. Have fun!
 
+Bear in mind - I've kept it simple, and everything in one page. This avoids complicating the plugin, but also saves your browser accessing random sites for libraries. Most of the JavaScript you need should be in state.html
+
+### Ideas
+I use the JSON to output to a dashboard holding the details of all my gotchis.
+
+There's nothing to stop the web page from holding historical data - how about making the temperature/cpu/memory a JS Graph over time? :D 
+
+I tried these briefly on a phone and they were........ small. Maybe a phone-friendly theme?
+
 ## TODO
 `GET /api/v1/inbox https://pwnagotchi.ai/api/local/#get-api-v1-inbox` - get any unread messages and/or total messages
 
