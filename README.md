@@ -1,6 +1,6 @@
 # pwnagotchi State Api
 
-Throw it into the plugins directory. 
+Throw the html and py files into the plugins directory. 
 
 ## Configuration
 
