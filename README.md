@@ -51,21 +51,24 @@ Call `/plugins/state-api/json` to retrieve the state JSON
 
 ## I Want to make my own theme!
 
+Themes go in /ui/web/templates/
+
 state-default.html is a good start. Name your file `state-{name_of_theme}.html`
 
-For example, I renamed state-default.html to state-darkmode.html and set the background and color CSS. Have fun!
+For example, I renamed state-default.html to state-darkmode.html and set the background and color CSS.
 
-Bear in mind - I've kept it simple, and everything in one page. This avoids complicating the plugin, but also saves your browser accessing random sites for libraries. Most of the JavaScript you need should be in state.html
+There are some useful variables passed when the page is rendered:
+``{{ title }}`` - the name of the pwnagotchi
+``{{ show_buttons }}`` - whether show_buttons is set in the config. You can use this to alter the page/javascript.
+``{{ other_mode }}`` - the opposite mode to the one we're in now
+``{{ fingerprint }}`` - the fingerprint of the agent - you can use this to go to the page in pwnagotchi.ai 
+
+Bear in mind - I've kept it simple, and everything in one page. This avoids complicating the plugin, but also saves your browser accessing random sites for libraries. Most of the JavaScript you need should be in state-default.html
 
 ### Theme ideas
 I use the JSON to output to a dashboard holding the details of all my gotchis. You could use one HTML page to reference multiple gotchis on your network. 
 
 There's nothing to stop the web page from holding historical data - how about making the temperature/cpu/memory a JS Graph over time? :D 
-
-I tried these briefly on a phone and they were........ small. Maybe a phone-friendly theme?
-
-## TODO
-`GET /api/v1/inbox https://pwnagotchi.ai/api/local/#get-api-v1-inbox` - get any unread messages and/or total messages
 
 ## Default page based on JSON being returned
 
@@ -77,7 +80,7 @@ I tried these briefly on a phone and they were........ small. Maybe a phone-frie
 
 ## Example multicolor version - the colours on the cpu/temp/memory change depending on severity
 
-![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/hotdog.PNG "Hotdog themed Pwnagotchi HTML page")
+![alt text](https://github.com/dipsylala/pwnagotchi-state-api/blob/master/images/hotdog.png "Hotdog themed Pwnagotchi HTML page")
 
 ## Dark mode on a phone
 

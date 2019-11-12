@@ -1,143 +1,64 @@
 <html>
     <head>
-
+        <title>{{ title }}</title>
         <style>
-
-            body {
-                font-family: "Courier New", Courier, monospace;
-                font-size: 100%;
-            }
+            body{font-family:"Courier New",Courier,monospace;font-size:100%;background:#000;color:#AAA}
 
             @media screen and (min-width: 750px) {
-            body {
-                font-size:150%
-                }
+            body{font-size:150%}
             }
-
             @media screen and (min-width: 1000px) {
-            body {
-                font-size:200%
-                }
+            body{font-size:200%}
             }
-
             @media screen and (min-width: 1250px) {
-            body {
-                font-size:250%
-                }
+            body{font-size:250%}
             }
-
-            .gotchicontainer{
-                max-width:38em
-            }
-
-            .flexible{
-                display:flex;
-                flex-wrap: wrap;
-            }
-
-            .headerbar{
-                border-bottom: 3px solid;
-            }
-
-            .headerbar div{
-                display:inline;
-            }
-
-            .channel{
-                width: 10em;
-                margin-right: 1em;
-            }
-            .aps{
-                flex-shrink: 1;
-                width: 10em;
-            }
-            .padder{
-                flex-grow: 1;
-                flex-shrink: 1;
-            }
-            .uptime{
-                flex-shrink: 1;
-                width: 13em;
-            }
-            .face {
-                font-family: "Courier New", Courier, monospace;
-                font-size: 3em;
-                flex:auto;
-                min-width: 4em;
-                max-width: 6em;
-            }
-
-            .name {
-                font-weight: bold;
-            }
-
-            .title {
-                font-weight: bold;
-            }
-
-            .status {
-                flex:1 1 0;
-                flex-wrap:nowrap;
-            }
-
-            .friend_face_text{
-                font-family: "Courier New", Courier, monospace;
-                font-size: 1.5em;
-                height: 2em;
-                line-height: 2em;
-                width: 5em;
-                margin-top: auto;
-                margin-bottom: auto;
-            }
-
-            .friend_name_text{
-                flex-shrink: 1;
-                font-size: 0.8em;
-                height: 2em;
-                line-height: 2em;
-                width: 16em;
-                padding-left: 0.5em;
-                margin-top: auto;
-                margin-bottom: auto;
-            }
-
-            .systemarea > div {
-                flex-shrink: auto;
-                padding: 15px;
-            }
-
-            .systemarea div {
-                display: inline;
-            }
-
-            .lowerarea{
-                border-top: 3px solid;
-            }
-
-            .lowerarea div{
-                display:inline;
-            }
-
-            .shakes{
-                flex-shrink: 1;
-            }
-            .mode{
-                flex-shrink: 1;
-            }
-
+            .gotchicontainer{max-width:38em}
+            .flexible{display:flex;flex-wrap:wrap}
+            .headerbar{border-bottom:3px solid}
+            .headerbar div{display:inline}
+            .channel{width:10em;margin-right:1em}
+            .aps{flex-shrink:1;width:10em}
+            .padder{flex-grow:1;flex-shrink:1}
+            .uptime{flex-shrink:1;width:13em}
+            .face{font-family:"Courier New",Courier,monospace;font-size:3em;flex:auto;min-width:4em;max-width:6em}
+            .name{font-weight:700}
+            .title{font-weight:700}
+            .status{flex:1 1 0;flex-wrap:nowrap}
+            .friend_face_text{font-family:"Courier New",Courier,monospace;font-size:1.5em;height:2em;line-height:2em;width:5em;margin-top:auto;margin-bottom:auto}
+            .friend_name_text{flex-shrink:1;font-size:.8em;height:2em;line-height:2em;width:16em;padding-left:.5em;margin-top:auto;margin-bottom:auto}
+            .systemarea > div{flex-shrink:auto;padding:15px}
+            .systemarea div{display:inline}
+            .lowerarea{border-top:3px solid}
+            .lowerarea div{display:inline}
+            .shakes{flex-shrink:1}
+            .mode{flex-shrink:1}
+            .buttons-wrapper { flex-shrink: 0; display: flex; /*flex-wrap: wrap;*/ padding: 0 16px; }
+            .buttons-wrapper .button { color: #555555; border: 1px solid #aaaaaa; border-radius: 4px; font-size: 1em; background:#000000; margin: 16px; }
         </style>
 
         <script>
             const $ = document.querySelector.bind(document);
 
             let stateRetrieval = (function(){
+
+                let show_buttons = {{ show_buttons }}; // Retrieved from config
+
                 let _populateDisplay = function(result){
 
                   $("#initialiser").style.display = (result.initialised === "false") ? "block" : "none";
                   $("#maindisplay").style.display = (result.initialised === "false") ? "none" : "block";
+                  $("#button-bar").style.display = (result.initialised === "false" || show_buttons === false) ? "none" : "flex";
 
-                  $("#channel").innerText = result.channel;
-                  $("#aps").innerText = result.aps;
+                  if (result.initialised === "false") {
+                      const snore = $("#snore");
+                      snore.innerText = snore.dataset.zeds.charAt(snore.dataset.index++);
+                      snore.dataset.index%=3;
+                      return;
+                  }
+
+                  $("#channel").innerText = result.channel_text;
+                  $("#aps").innerText = result.aps_text;
                   $("#uptime").innerText = result.uptime;
 
                   $("#name").innerText = result.name + ">";
@@ -180,7 +101,7 @@
     </head>
     <body>
         <div id="initialiser" class="gotchiinitialising">
-            Initialising!
+            Getting ready... (ᴗ˳ᴗ)<div id="snore" style="display: inline" data-index=0 data-zeds=".zZ">.</div>
         </div>
 
         <div id="maindisplay" class="gotchicontainer" style="display:none;">
@@ -233,8 +154,26 @@
                 <div class="mode title" id="mode"></div>
             </div>
         </div>
+        <div id="button-bar" class="buttons-wrapper" style="display:none;">
+                <form class="action" method="POST" action="/shutdown" onsubmit="return confirm('This will halt the unit, continue?');">
+                  <input type="submit" class="button" value="Shutdown"/>
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                </form>
+
+                <form class="action" method="POST" action="/restart" onsubmit="return confirm('This will restart the service in {{ other_mode }} mode, continue?');">
+                  <input type="submit" class="button" value="Restart in {{ other_mode }} mode"/>
+                  <input type="hidden" name="mode" value="{{ other_mode }}"/>
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                </form>
+
+                <form class="action" method="GET" action="https://pwnagotchi.ai/pwnfile/#{{ fingerprint }}">
+                  <input type="submit" class="button" formtarget="_blank" value="Pwnfile"/>
+                </form>
+              </div>
         <script>
-            stateRetrieval.initialise();
+            window.onload = function() {
+                stateRetrieval.initialise();
+            };
         </script>
     </body>
 </html>
