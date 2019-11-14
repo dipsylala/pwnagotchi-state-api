@@ -65,13 +65,12 @@ class StateApi(plugins.Plugin):
             "version": pwnagotchi.version,
             "memory": pwnagotchi.mem_usage(),   # Scale 0-1
             "cpu": pwnagotchi.cpu_load(),       # Scale 0-1
-            "temperature": pwnagotchi.temperature() # Degrees C
+            "temperature": pwnagotchi.temperature()  # Degrees C
         }
 
         return jsonify(result)
 
     def _return_png(self):
-        # TODO - can we avoid writing to a file then reading, or keep it in memory?
         with web.frame_lock:
             return send_file(web.frame_path, mimetype="image/png")
 
@@ -81,20 +80,12 @@ class StateApi(plugins.Plugin):
             return jsonify({"message": "Method Not Allowed"}), 405
 
         if path is None or path == "":
-            theme = "state-default.html"
+            theme = "theme-default.html"
 
             if "theme" in self.options:
-                theme = "state-" + self.options["theme"] + ".html"
+                theme = "theme-" + self.options["theme"] + ".html"
 
-            show_buttons = "true"
-            if "buttons" in self.options:
-                show_buttons = "false" if self.options["buttons"] == False else "true"
-
-            return render_template(theme,
-                                    title=pwnagotchi.name(),
-                                    show_buttons = show_buttons,
-                                    other_mode='AUTO' if self.AGENT.mode == 'manual' else 'MANU',
-                                    fingerprint=self.AGENT.fingerprint())
+            return render_template(theme)
 
         if path not in ["json", "png"]:
             return jsonify({"message": "Unsupported Media Type"}), 415

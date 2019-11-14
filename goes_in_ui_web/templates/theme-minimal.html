@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Pwnagotchi</title>
+        <script type="text/javascript" src="/js/state-api.js"></script>
+        <script type="text/javascript" src="/js/theme-minimal.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/theme-minimal.css">
+    </head>
+
+    <body>
+        <div id="initialiser" class="gotchiinitialising">
+            (ᴗ˳ᴗ)<div id="snore" style="display: inline" data-index=0 data-zeds=".zZ">.</div>
+        </div>
+
+        <div id="maindisplay" class="gotchicontainer" style="display:none">
+            <div class="mainarea">
+                <div class="name" id="name"></div>
+                <div class="face" id="face"></div>
+                <div class="status" id="status"></div>
+            </div>
+            <div class="lowerarea flexible" >
+                <div>
+                    <div class="title">Pwned: </div>
+                    <div class="shakes" id="shakes"></div>
+                </div>
+                <div class="padder"></div>
+                <div class="mode title" id="mode"></div>
+            </div>
+        </div>
+        <script>
+            window.onload = function() {
+                pwnagotchi.stateRetrieval.initialise(pwnagotchi.populateDisplay);
+            };
+        </script>
+    </body>
+</html>

@@ -1,0 +1,20 @@
+body{font-family:"Courier New",Courier,monospace;font-size:100%;background-color: black;color: #AAAAAA;}
+
+@media screen and (min-width: 750px) {
+body{font-size:150%}
+}
+@media screen and (min-width: 1000px) {
+body{font-size:200%}
+}
+@media screen and (min-width: 1250px) {
+body{font-size:250%}
+}
+.gotchicontainer{max-width:38em}
+.flexible{display:flex;flex-wrap:wrap}
+.padder{flex-grow:1;flex-shrink:1}
+.name{font-weight:700}
+.face{font-family:"Courier New",Courier,monospace;font-size:3em;flex:auto;min-width:4em;max-width:6em}
+.title{font-weight:700}
+.lowerarea div{display:inline}
+.shakes{flex-shrink:1}
+.mode{flex-shrink:1}
