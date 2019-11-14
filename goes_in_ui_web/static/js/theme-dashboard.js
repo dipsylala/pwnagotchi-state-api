@@ -23,7 +23,7 @@ pwnagotchi.dashboard = (function () {
         _cpu.push((results.cpu * 100).toFixed(2))
         _pwnd_run.push(results.pwnd_run);
     };
-
+ 
     let _archiveOldResults = function () {
         if (_x.length > 400) {
             _x.shift();

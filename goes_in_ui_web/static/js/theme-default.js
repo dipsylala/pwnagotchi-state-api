@@ -18,4 +18,4 @@ pwnagotchi.populateDisplay = function(result){
     $("#cpu").innerText = (result.cpu * 100).toFixed(2) + "%";
     $("#temperature").innerText = result.temperature.toFixed(2) +"c";
     $("#memory").innerText = (result.memory * 100).toFixed(2) + "%"
-};
+}; 
