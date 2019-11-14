@@ -3,23 +3,20 @@
     <head>
         <meta charset="UTF-8">
         <title>Pwnagotchi</title>
+        <link rel="stylesheet" href="/js/jquery.mobile/jquery.mobile-1.4.5.min.css"/>
         <script type="text/javascript" src="/js/state-api.js"></script>
         <script type="text/javascript" src="/js/theme-default.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/theme-default.css">
     </head>
 
     <body>
-        <div id="initialiser" class="gotchiinitialising">
-            Getting ready... (ᴗ˳ᴗ)<div id="snore" style="display: inline" data-index=0 data-zeds=".zZ">.</div>
-        </div>
-
-        <div id="maindisplay" class="gotchicontainer" style="display:none">
-            <div class="headerbar flexible">
+        <div id="maindisplay" class="flexible" data-next="#graphdisplay" data-role="page">
+            <div data-role="header" data-position='fixed'>
                 <div>
                     <div class="title">Channel:</div>
                     <div class="channel" id="channel" ></div>
                 </div>
-
+            
                 <div>
                     <div class="title">APs:</div>
                     <div class="aps" id="aps"></div>
@@ -31,30 +28,31 @@
                     <div class="uptime" id="uptime"></div>
                 </div>
             </div>
-            <div class="mainarea flexible">
+
+            <div role="main" class="ui-content flexible">
                 <div class="name" id="name"></div>
                 <div class="face" id="face"></div>
                 <div class="status" id="status"></div>
-            </div>
-            <div class="friendarea flexible">
-                <div class="friend_face_text" id="friend_face_text"></div>
-                <div class="friend_name_text" id="friend_name_text"></div>
-            </div>
-            <div class="systemarea flexible">
-                <div>
-                    <div class="title">CPU: </div>
-                    <div class="cpu" id="cpu"></div>
+                <div class="friendarea flexible">
+                    <div class="friend_face_text" id="friend_face_text"></div>
+                    <div class="friend_name_text" id="friend_name_text"></div>
                 </div>
-                <div>
-                    <div class="title">Temp: </div>
-                    <div class="temperature" id="temperature"></div>
-                </div>
-                <div>
-                    <div class="title">Memory: </div>
-                    <div class="memory" id="memory"></div>
+                <div class="systemarea flexible">
+                    <div>
+                        <div class="title">CPU: </div>
+                        <div class="cpu" id="cpu"></div>
+                    </div>
+                    <div>
+                        <div class="title">Temp: </div>
+                        <div class="temperature" id="temperature"></div>
+                    </div>
+                    <div>
+                        <div class="title">Memory: </div>
+                        <div class="memory" id="memory"></div>
+                    </div>
                 </div>
             </div>
-            <div class="lowerarea flexible">
+            <div data-role="footer" class="flexible" data-position='fixed'>
                 <div>
                     <div class="title">Pwned: </div>
                     <div class="shakes" id="shakes"></div>

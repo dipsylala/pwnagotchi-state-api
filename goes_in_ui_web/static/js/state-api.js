@@ -1,5 +1,3 @@
-const $ = document.querySelector.bind(document); // We don't need much of jQuery - usually just this.
-
 var pwnagotchi = pwnagotchi || {};
 
 pwnagotchi.stateRetrieval = (function(){
@@ -17,9 +15,12 @@ pwnagotchi.stateRetrieval = (function(){
                     if (snore.dataset.index>2) { snore.dataset.index = "0";}
                     return;
                 }
-                $("#initialiser").style.display = "none";
-                $("#maindisplay").style.display = "block";
 
+                if (response.name !== undefined) {
+                    window.document.title = response.name;
+                }
+
+                $.mobile.loading( 'hide' );
                 callback(response)
             }
         };

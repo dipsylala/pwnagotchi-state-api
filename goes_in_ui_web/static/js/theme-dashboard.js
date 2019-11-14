@@ -36,7 +36,8 @@ pwnagotchi.dashboard = (function () {
 
     let populateDisplayAndGraph = function (results) {
         pwnagotchi.populateDisplay(results);
-        let now = new Date();
+
+        $.mobile.loading( 'hide' );
 
         if (_last_graph !== null && Math.abs(now - _last_graph) < 10000) {
             return
@@ -134,7 +135,44 @@ pwnagotchi.dashboard = (function () {
         ];
 
         Plotly.newPlot('time-series-pwned', pwnd_data, pwned_layout, _defaultGraphSettings);
+
+        $( document ).on( "swipeleft", ".ui-page", function( event ) {
+            // Get the filename of the next page. We stored that in the data-next
+            // attribute in the original markup.
+            var next = $( this ).jqmData( "next" );
+            if ( next ) {
+                navnext( next );
+            }
+        });
+        // The same for the navigating to the previous page
+        $( document ).on( "swiperight", ".ui-page", function( event ) {
+            var prev = $( this ).jqmData( "prev" );
+            if (prev) {
+                navprev( prev );
+            }
+        });
+    
+        $.mobile.loading( 'show', {
+            text: '',
+            textVisible: true,
+            theme: 'z',
+            html: "Getting ready... (ᴗ˳ᴗ)<div id='snore' style='display: inline' data-index=0 data-zeds='.zZ'>.</div>"
+        });
     };
+
+    let navnext = function ( next ) {
+        $( ":mobile-pagecontainer" ).pagecontainer( "change", next, {
+            transition: "slide"
+        });
+    }
+
+    let navprev = function ( prev ) {
+        $( ":mobile-pagecontainer" ).pagecontainer( "change", prev, {
+            transition: "slide",
+            reverse: true
+        });
+    }
+
 
     return {
         initialise: initialise,
