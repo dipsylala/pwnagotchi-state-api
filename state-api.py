@@ -1,8 +1,7 @@
 import logging
-import os
 import pwnagotchi.plugins as plugins
 import pwnagotchi
-from flask import jsonify, Response, send_file, render_template
+from flask import jsonify, Response, send_file, render_template, abort
 import pwnagotchi.grid as grid
 import pwnagotchi.ui.web as web
 
@@ -24,8 +23,9 @@ class StateApi(plugins.Plugin):
         if self.DISPLAY is None:
             return jsonify({"initialised": "false"})
 
-        # TODO: We need to check these calls - which cause an internet hit?
-        # TODO: Check if grid. is connected?
+        # All these fall under the local API
+        # https://pwnagotchi.ai/api/local/
+        # Typically on http://127.0.0.1:8666
         mesh_data = grid.call("/mesh/data")
         mesh_peers = grid.peers()
         messages = grid.inbox()
@@ -76,10 +76,10 @@ class StateApi(plugins.Plugin):
         with web.frame_lock:
             return send_file(web.frame_path, mimetype="image/png")
 
-    # IMPORTANT: If you use "POST"s, add a csrf-token (via csrf_token() and render_template_string)
+    # IMPORTANT: If you use "POST"s, add a csrf-token (via csrf_token() and render_template/render_template_string)
     def on_webhook(self, path, request):
         if request.method != "GET":
-            return jsonify({"message": "Method Not Allowed"}), 405
+            return abort(405)
 
         if path is None or path == "":
             theme = "theme-default.html"
@@ -90,7 +90,7 @@ class StateApi(plugins.Plugin):
             return render_template(theme)
 
         if path not in ["json", "png"]:
-            return jsonify({"message": "Unsupported Media Type"}), 415
+            return abort(415)
 
         if path == "png":
             return self._return_png()
