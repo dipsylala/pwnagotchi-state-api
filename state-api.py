@@ -24,6 +24,8 @@ class StateApi(plugins.Plugin):
         if self.DISPLAY is None:
             return jsonify({"initialised": "false"})
 
+        # TODO: We need to check these calls - which cause an internet hit?
+        # TODO: Check if grid. is connected?
         mesh_data = grid.call("/mesh/data")
         mesh_peers = grid.peers()
         messages = grid.inbox()
@@ -52,7 +54,7 @@ class StateApi(plugins.Plugin):
             "channel": self.AGENT.get_current_channel(),
             "uptime": self.DISPLAY.get('uptime'),
             "mode": self.DISPLAY.get('mode'),
-            "name": mesh_data["name"],
+            "name": pwnagotchi.name(),
             "face": mesh_data["face"],
             "num_peers": len(mesh_peers),
             "peers": peers,
