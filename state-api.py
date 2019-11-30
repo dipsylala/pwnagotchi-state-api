@@ -1,6 +1,7 @@
 import logging
 import pwnagotchi.plugins as plugins
 import pwnagotchi
+import pwngotchi.utils as utils
 from flask import jsonify, Response, send_file, render_template, abort
 import pwnagotchi.grid as grid
 import pwnagotchi.ui.web as web
@@ -26,26 +27,42 @@ class StateApi(plugins.Plugin):
         # All these fall under the local API
         # https://pwnagotchi.ai/api/local/
         # Typically on http://127.0.0.1:8666
-        mesh_data = grid.call("/mesh/data")
-        mesh_peers = grid.peers()
-        messages = grid.inbox()
 
-        total_messages = len(messages)
-        unread_messages = len([m for m in messages if m['seen_at'] is None])
+        total_messages = "-"
+        unread_messages = "-"
+        mesh_data = None
+        mesh_peers = None
+
+        grid_memory = grid.memory()
+
+        try:
+            if grid.is_connected:
+                mesh_data = grid.call("/mesh/data")
+
+                messages = grid.inbox()
+                total_messages = len(messages)
+                unread_messages = len([m for m in messages if m['seen_at'] is None])
+        except Exception as e:
+            logging.exception('error while reading state-api: %s' % str(e))
 
         peers = []
-        for peer in mesh_peers:
+        for peer in grid_memory:
             peers.append({
-                "identity": peer["advertisement"]["identity"],
-                "name": peer["advertisement"]["name"],
-                "face": peer["advertisement"]["face"],
-                "pwnd_run": peer["advertisement"]["pwnd_run"],
-                "pwnd_tot": peer["advertisement"]["pwnd_tot"],
+                "fingerprint": peer.advertisement.fingerprint,
+                "name": peer.advertisement.name,
+                "face": peer.advertisement.face,
+                "pwnd_run": peer.advertisement.pwnd_run,
+                "pwnd_tot": peer.advertisement.pwnd_tot,
             })
 
+        handshakes_display = self.DISPLAY.get('shakes').splt(" ")
+        # Need a better way of getting this rather than referencing the display
+        pwnd_run = handshakes_display[0]
+        pwnd_tot = utils.total_unique_handshakes(self._config['bettercap']['handshakes'])
+
         result = {
-            "identity": mesh_data["identity"],
-            "epoch": mesh_data["epoch"],
+            "fingerprint": mesh_data["identity"],
+            "epoch": "*" if mesh_data is None else mesh_data["epoch"],
             "status": self.DISPLAY.get('status'),
             "channel_text": self.DISPLAY.get('channel'),
             "aps_text": self.DISPLAY.get('aps'),
@@ -55,15 +72,15 @@ class StateApi(plugins.Plugin):
             "uptime": self.DISPLAY.get('uptime'),
             "mode": self.DISPLAY.get('mode'),
             "name": pwnagotchi.name(),
-            "face": mesh_data["face"],
-            "num_peers": len(mesh_peers),
+            "face": self.DISPLAY.get('face'),
+            "num_peers": len(peers),
             "peers": peers,
             "total_messages": total_messages,
             "unread_messages": unread_messages,
             "friend_face_text": self.DISPLAY.get('friend_face'),
             "friend_name_text": self.DISPLAY.get('friend_name'),
-            "pwnd_run": mesh_data["pwnd_run"],
-            "pwnd_tot": mesh_data["pwnd_tot"],
+            "pwnd_run": pwnd_run,
+            "pwnd_tot": pwnd_tot,
             "version": pwnagotchi.version,
             "memory": pwnagotchi.mem_usage(),   # Scale 0-1
             "cpu": pwnagotchi.cpu_load(),       # Scale 0-1
