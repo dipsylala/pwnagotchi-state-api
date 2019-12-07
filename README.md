@@ -2,6 +2,11 @@
 
 Throw the py file and state-api directory into the plugins directory. 
 
+## Installation
+Perform a git clone from here.
+The ```state-api.py``` file goes in the plugins/defaults directory, or wherever you want to put your custom plugins
+The files in goes_in_ui_web has to go in ```/usr/local/lib/python3.7/dist-packages/pwnagotchi/ui/web``` unless you want to put them in ```/usr/local/src/pwnagotchi/pwnagotchi/ui/web/``` and perform a ```pip3 install .```
+
 ## Configuration
 
 ```
