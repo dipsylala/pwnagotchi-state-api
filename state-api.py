@@ -27,24 +27,16 @@ class StateApi(plugins.Plugin):
         # All these fall under the local API
         # https://pwnagotchi.ai/api/local/
         # Typically on http://127.0.0.1:8666
+        # BUT the local API can trigger calls to the wider grid
 
         total_messages = "-"
         unread_messages = "-"
         mesh_data = None
-        mesh_peers = None
 
+        # Retrieve peer details from the grid memory
+        # BUT this calls "/mesh/memory" which may involve an internet call?
+        # TODO: Look at /api/v1/mesh/peers as an alternative
         grid_memory = grid.memory()
-
-        try:
-            if grid.is_connected:
-                mesh_data = grid.call("/mesh/data")
-
-                messages = grid.inbox()
-                total_messages = len(messages)
-                unread_messages = len([m for m in messages if m['seen_at'] is None])
-        except Exception as e:
-            logging.exception('error while reading state-api: %s' % str(e))
-
         peers = []
         for peer in grid_memory:
             peers.append({
@@ -55,14 +47,28 @@ class StateApi(plugins.Plugin):
                 "pwnd_tot": peer.advertisement.pwnd_tot,
             })
 
-        handshakes_display = self.DISPLAY.get('shakes').splt(" ")
-        # Need a better way of getting this rather than referencing the display
+        # Get mail data (if connected to internet)
+        try:
+            if grid.is_connected:
+                mesh_data = grid.call("/mesh/data")
+
+                messages = grid.inbox()
+                total_messages = len(messages)
+                unread_messages = len([m for m in messages if m['seen_at'] is None])
+        except Exception as e:
+            logging.exception('error while reading state-api: %s' % str(e))
+
+        # TODO: Need a better way of getting this rather than referencing the display
+        handshakes_display = self.DISPLAY.get('shakes').split(" ")
+
+        # In general, any underlying state within the state machine should be used.
+        # The display is fluid and unreliable.
         pwnd_run = handshakes_display[0]
         pwnd_tot = utils.total_unique_handshakes(self._config['bettercap']['handshakes'])
 
         result = {
             "fingerprint": mesh_data["identity"],
-            "epoch": "*" if mesh_data is None else mesh_data["epoch"],
+            "epoch": "-" if mesh_data is None else mesh_data["epoch"],
             "status": self.DISPLAY.get('status'),
             "channel_text": self.DISPLAY.get('channel'),
             "aps_text": self.DISPLAY.get('aps'),
@@ -87,13 +93,15 @@ class StateApi(plugins.Plugin):
             "temperature": pwnagotchi.temperature()  # Degrees C
         }
 
+        # TODO See if there is any way of getting a list of plugins and their associated UI components
+        # so we can incorporate it into the feedback.
+
         return jsonify(result)
 
     def _return_png(self):
         with web.frame_lock:
             return send_file(web.frame_path, mimetype="image/png")
 
-    # IMPORTANT: If you use "POST"s, add a csrf-token (via csrf_token() and render_template/render_template_string)
     def on_webhook(self, path, request):
         if request.method != "GET":
             return abort(405)
@@ -116,7 +124,7 @@ class StateApi(plugins.Plugin):
 
     # called when the plugin is loaded
     def on_loaded(self):
-        logging.warning("State API loaded")
+        logging.info("State API loaded")
 
     def on_ui_update(self, ui):
         self.DISPLAY = ui
