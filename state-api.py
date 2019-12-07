@@ -1,10 +1,13 @@
 import logging
+import requests
+from requests.exceptions import HTTPError
 import pwnagotchi.plugins as plugins
 import pwnagotchi
-import pwngotchi.utils as utils
+import pwnagotchi.utils as utils
 from flask import jsonify, Response, send_file, render_template, abort
 import pwnagotchi.grid as grid
 import pwnagotchi.ui.web as web
+
 
 class StateApi(plugins.Plugin):
     __name__ = 'state-api'
@@ -15,6 +18,7 @@ class StateApi(plugins.Plugin):
 
     DISPLAY = None
     AGENT = None
+    _epoch_data = None
 
     def __init__(self):
         logging.debug("State API plugin created")
@@ -28,30 +32,44 @@ class StateApi(plugins.Plugin):
         # https://pwnagotchi.ai/api/local/
         # Typically on http://127.0.0.1:8666
         # BUT the local API can trigger calls to the wider grid
+        # so bear in mind that grid calls could fail
+
+        # TODO: Break this up into function calls! Keep it SOLID.
 
         total_messages = "-"
         unread_messages = "-"
-        mesh_data = None
 
-        # Retrieve peer details from the grid memory
-        # BUT this calls "/mesh/memory" which may involve an internet call?
-        # TODO: Look at /api/v1/mesh/peers as an alternative
-        grid_memory = grid.memory()
+        peers_response = None
+        try:
+            response = requests.get('http://0.0.0.0:8666/api/v1/mesh/peers')
+            peers_response = response.json()
+        except HTTPError as http_err:
+            logging.error(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            logging.error(f'Other error occurred: {err}')
+
         peers = []
-        for peer in grid_memory:
+        for peer in peers_response:
             peers.append({
-                "fingerprint": peer.advertisement.fingerprint,
+                "fingerprint": peer.advertisement.identity,
                 "name": peer.advertisement.name,
                 "face": peer.advertisement.face,
                 "pwnd_run": peer.advertisement.pwnd_run,
                 "pwnd_tot": peer.advertisement.pwnd_tot,
             })
 
+        mesh_data_response = None
+        try:
+            response = requests.get('http://0.0.0.0:8666/api/v1/mesh/data')
+            mesh_data_response = response.json()
+        except HTTPError as http_err:
+            logging.error(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            logging.error(f'Other error occurred: {err}')
+
         # Get mail data (if connected to internet)
         try:
             if grid.is_connected:
-                mesh_data = grid.call("/mesh/data")
-
                 messages = grid.inbox()
                 total_messages = len(messages)
                 unread_messages = len([m for m in messages if m['seen_at'] is None])
@@ -60,15 +78,14 @@ class StateApi(plugins.Plugin):
 
         # TODO: Need a better way of getting this rather than referencing the display
         handshakes_display = self.DISPLAY.get('shakes').split(" ")
-
         # In general, any underlying state within the state machine should be used.
         # The display is fluid and unreliable.
         pwnd_run = handshakes_display[0]
-        pwnd_tot = utils.total_unique_handshakes(self._config['bettercap']['handshakes'])
+        pwnd_tot = utils.total_unique_handshakes(self.AGENT.config()['bettercap']['handshakes'])
 
         result = {
-            "fingerprint": mesh_data["identity"],
-            "epoch": "-" if mesh_data is None else mesh_data["epoch"],
+            "fingerprint": self.AGENT.fingerprint(),
+            "epoch": "-" if mesh_data_response is None else mesh_data_response["epoch"],
             "status": self.DISPLAY.get('status'),
             "channel_text": self.DISPLAY.get('channel'),
             "aps_text": self.DISPLAY.get('aps'),
@@ -88,14 +105,13 @@ class StateApi(plugins.Plugin):
             "pwnd_run": pwnd_run,
             "pwnd_tot": pwnd_tot,
             "version": pwnagotchi.version,
-            "memory": pwnagotchi.mem_usage(),   # Scale 0-1
-            "cpu": pwnagotchi.cpu_load(),       # Scale 0-1
+            "memory": pwnagotchi.mem_usage(),  # Scale 0-1
+            "cpu": pwnagotchi.cpu_load(),  # Scale 0-1
             "temperature": pwnagotchi.temperature()  # Degrees C
         }
 
         # TODO See if there is any way of getting a list of plugins and their associated UI components
         # so we can incorporate it into the feedback.
-
         return jsonify(result)
 
     def _return_png(self):
@@ -112,7 +128,10 @@ class StateApi(plugins.Plugin):
             if "theme" in self.options:
                 theme = "theme-" + self.options["theme"] + ".html"
 
-            return render_template(theme)
+            try:
+                return render_template(theme)
+            except Exception as err:
+                return "Could not render the page. Did you put the JS and HTML where you should?"
 
         if path not in ["json", "png"]:
             return abort(415)
@@ -132,3 +151,4 @@ class StateApi(plugins.Plugin):
     # called when everything is ready and the main loop is about to start
     def on_ready(self, agent):
         self.AGENT = agent
+
