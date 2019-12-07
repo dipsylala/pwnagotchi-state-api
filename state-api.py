@@ -131,7 +131,7 @@ class StateApi(plugins.Plugin):
             try:
                 return render_template(theme)
             except Exception as err:
-                return "Could not render the page. Did you put the JS and HTML where you should?"
+                return "Could not render the page. Did you put the JS and HTML where you should?<br/>Copy the contents of pwnagotchi-state-api/goes_in_ui_web to /usr/local/lib/python3.7/dist-packages/pwnagotchi/ui/web"
 
         if path not in ["json", "png"]:
             return abort(415)
