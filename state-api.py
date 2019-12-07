@@ -51,11 +51,11 @@ class StateApi(plugins.Plugin):
         peers = []
         for peer in peers_response:
             peers.append({
-                "fingerprint": peer.advertisement.identity,
-                "name": peer.advertisement.name,
-                "face": peer.advertisement.face,
-                "pwnd_run": peer.advertisement.pwnd_run,
-                "pwnd_tot": peer.advertisement.pwnd_tot,
+                "fingerprint": peer['advertisement']['identity'],
+                "name": peer['advertisement']['name'],
+                "face": peer['advertisement']['face'],
+                "pwnd_run": peer['advertisement']['pwnd_run'],
+                "pwnd_tot": peer['advertisement']['pwnd_tot']
             })
 
         mesh_data_response = None
@@ -151,4 +151,3 @@ class StateApi(plugins.Plugin):
     # called when everything is ready and the main loop is about to start
     def on_ready(self, agent):
         self.AGENT = agent
-
