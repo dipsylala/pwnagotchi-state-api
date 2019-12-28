@@ -83,6 +83,10 @@ class StateApi(plugins.Plugin):
         pwnd_run = handshakes_display[0]
         pwnd_tot = utils.total_unique_handshakes(self.AGENT.config()['bettercap']['handshakes'])
 
+        pwnd_last = None
+        if len(handshakes_display) > 2:
+            pwnd_last = handshakes_display[2][1:-1]
+
         result = {
             "fingerprint": self.AGENT.fingerprint(),
             "epoch": "-" if mesh_data_response is None else mesh_data_response["epoch"],
@@ -102,6 +106,7 @@ class StateApi(plugins.Plugin):
             "unread_messages": unread_messages,
             "friend_face_text": self.DISPLAY.get('friend_face'),
             "friend_name_text": self.DISPLAY.get('friend_name'),
+            "pwnd_last": pwnd_last,
             "pwnd_run": pwnd_run,
             "pwnd_tot": pwnd_tot,
             "version": pwnagotchi.version,
