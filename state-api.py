@@ -77,7 +77,7 @@ class StateApi(plugins.Plugin):
             logging.exception('error while reading state-api: %s' % str(e))
 
         # TODO: Need a better way of getting this rather than referencing the display
-        handshakes_display = self.DISPLAY.get('shakes').split(" ")
+        handshakes_display = self.DISPLAY.get('shakes').split(" ", 2)
         # In general, any underlying state within the state machine should be used.
         # The display is fluid and unreliable.
         pwnd_run = handshakes_display[0]
