@@ -4,7 +4,7 @@ import pwnagotchi
 from pwnagotchi import plugins
 from pwnagotchi import utils
 from pwnagotchi import grid
-from pwnagotchi import web
+from pwnagotchi.ui import web
 from requests.exceptions import HTTPError
 from flask import jsonify, send_file, render_template, abort
 
