@@ -1,18 +1,18 @@
 import logging
 import requests
-from requests.exceptions import HTTPError
-import pwnagotchi.plugins as plugins
 import pwnagotchi
-import pwnagotchi.utils as utils
-from flask import jsonify, Response, send_file, render_template, abort
-import pwnagotchi.grid as grid
-import pwnagotchi.ui.web as web
+from pwnagotchi import plugins
+from pwnagotchi import utils
+from pwnagotchi import grid
+from pwnagotchi.ui import web
+from requests.exceptions import HTTPError
+from flask import jsonify, send_file, render_template, abort
 
 
 class StateApi(plugins.Plugin):
     __name__ = 'state-api'
     __author__ = 'https://github.com/dipsylala'
-    __version__ = '0.9.0'
+    __version__ = '1.0.0'
     __license__ = 'GPL3'
     __description__ = 'Provides JSON state data or a default page'
 
@@ -109,7 +109,7 @@ class StateApi(plugins.Plugin):
             "pwnd_last": pwnd_last,
             "pwnd_run": pwnd_run,
             "pwnd_tot": pwnd_tot,
-            "version": pwnagotchi.version,
+            "version": pwnagotchi.__version__,
             "memory": pwnagotchi.mem_usage(),  # Scale 0-1
             "cpu": pwnagotchi.cpu_load(),  # Scale 0-1
             "temperature": pwnagotchi.temperature()  # Degrees C
@@ -135,7 +135,7 @@ class StateApi(plugins.Plugin):
 
             try:
                 return render_template(theme)
-            except Exception as err:
+            except Exception:
                 return "Could not render the page. Did you put the JS and HTML where you should?<br/>Copy the contents of pwnagotchi-state-api/goes_in_ui_web to /usr/local/lib/python3.7/dist-packages/pwnagotchi/ui/web"
 
         if path not in ["json", "png"]:
