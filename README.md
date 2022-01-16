@@ -1,3 +1,5 @@
+<Apologies, but I no longer have any involvement with Pwnagotchi. Please consider this unsupported, but I'll leave this so it can be cloned>
+
 # pwnagotchi State Api
 
 Throw the py file and state-api directory into the plugins directory. 
